@@ -53,7 +53,10 @@ public class Launcher : MonoBehaviour
     }
     private void Update()
     {
- 
+        if(cannon.transform.position.y  < 0)
+        {
+            StopMovement();
+        }
      
     }
 
@@ -169,11 +172,28 @@ public class Launcher : MonoBehaviour
     {
         CancelInvoke();
         Rigidbody rb = cannon.GetComponent<Rigidbody>();
-        rb.useGravity = false;
 
-        rb.velocity = new Vector3(0,0,0);
+
+        if (cannon.transform.position.y < -2f)
+        {
+            rb.useGravity = false;
+
+
+
+            rb.velocity = new Vector3(0, 0, 0);
+
+        }
+
      
     }
+
+    public void stopCalculating()
+    {
+        CancelInvoke();
+
+    }
+
+
 
     public void onAnguloChange()
     {
