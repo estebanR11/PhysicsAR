@@ -15,4 +15,13 @@ public class ResultsManager : MonoBehaviour
         manager.gameObject.transform.SetParent(this.transform);
         manager.setText(text);
     }
+
+    public void SpawnPrefabFall(string y, string t, string vel)
+    {
+        string text = "T: " + t + "s -" + "Y: " + y + "m -" +  "V: " + vel + " m/s";
+
+        TextManager manager = Instantiate(prefab).GetComponent<TextManager>();
+        manager.gameObject.transform.SetParent(this.transform);
+        manager.setText(text);
+    }
 }

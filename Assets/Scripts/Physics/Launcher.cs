@@ -64,10 +64,6 @@ public class Launcher : MonoBehaviour
     public void Launch()
     {
 
-
-
-
-
         Rigidbody rb = cannon.GetComponent<Rigidbody>();
         rb.velocity = CalculateVelocity();
 
