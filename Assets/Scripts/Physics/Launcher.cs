@@ -63,16 +63,19 @@ public class Launcher : MonoBehaviour
 
     public void Launch()
     {
+        if(!isOnAir)
+        {
+            Rigidbody rb = cannon.GetComponent<Rigidbody>();
+            rb.velocity = CalculateVelocity();
 
-        Rigidbody rb = cannon.GetComponent<Rigidbody>();
-        rb.velocity = CalculateVelocity();
+            isOnAir = true;
 
-        isOnAir = true;
-    
-        resultsManager.SpawnPrefab(cannon.transform.position.x.ToString("F2"), cannon.transform.position.y.ToString("F2"), actualTime.ToString("F2"));
+            resultsManager.SpawnPrefab(cannon.transform.position.x.ToString("F2"), cannon.transform.position.y.ToString("F2"), actualTime.ToString("F2"));
 
-        InvokeRepeating("getData",timeBetweenSteps, timeBetweenSteps);
-    
+            InvokeRepeating("getData", timeBetweenSteps, timeBetweenSteps);
+
+        }
+
     }
 
     public void getData()

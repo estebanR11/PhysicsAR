@@ -31,7 +31,10 @@ public class CaidaLibre : MonoBehaviour
 
     Rigidbody rb;
 
-    bool isSimulating; 
+    bool isSimulating;
+    [SerializeField]float calculateValue;
+    [SerializeField] float resultado;
+
     private void Start()
     {
         rb = objectInfo.GetComponent<Rigidbody>();
@@ -41,8 +44,9 @@ public class CaidaLibre : MonoBehaviour
 
     private void Update()
     {
-     
-        
+  
+
+
     }
 
     private void FixedUpdate()
@@ -54,41 +58,33 @@ public class CaidaLibre : MonoBehaviour
 
     
         resultsManager.SpawnPrefabFall(objectInfo.transform.position.y.ToString("F2"), actualTime.ToString("F2"), rb.velocity.y.ToString("F2"));
-        
-           
-
-            isSimulating = true;
-        StartCoroutine(getDataFalling());
+        rb.useGravity = true;
+        isSimulating = true;
+        InvokeRepeating("GetData",0.5f,0.5f);
 
      }
 
     public void GetData()
     {
-        actualTime += timeBetweenSteps;
-
-        resultsManager.SpawnPrefabFall(objectInfo.transform.position.y.ToString("F2"), actualTime.ToString("F2"), rb.velocity.y.ToString("F2"));
+        actualTime += 0.5f;
+        
+        resultsManager.SpawnPrefabFall(calculateData().ToString("F4"), actualTime.ToString("F2"), rb.velocity.y.ToString("F1"));
 
     }
 
-    IEnumerator getDataFalling()
+    float calculateData()
     {
-        while(isSimulating)
-        {
-            yield return new WaitForSecondsRealtime(0.5f);
-            actualTime += timeBetweenSteps;
-            rb.useGravity = true;
-            resultsManager.SpawnPrefabFall(objectInfo.transform.position.y.ToString("F2"), actualTime.ToString("F2"), rb.velocity.y.ToString("F2"));
-    
-        }
+        //H + (1/2 -gt^2)
+        resultado = (90 + (0.5f * gravity * Mathf.Pow(actualTime, 2)));
 
-
-
+        return resultado;
     }
+ 
     public void StopSimul()
     {
-     //   CancelInvoke();
+     CancelInvoke();
         isSimulating = false;
-        StopCoroutine(getDataFalling());
+
 
     }
 
