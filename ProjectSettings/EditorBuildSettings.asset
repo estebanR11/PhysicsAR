@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CaidaLibre.unity
     guid: 1af94196e5db53e4eac8ca873fbeee46
+  - enabled: 1
+    path: Assets/Scenes/TerceraLey.unity
+    guid: acdebd95e6c02ae41aba5855b752efdc
   m_configObjects: {}

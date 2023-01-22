@@ -10,11 +10,13 @@ public class FrictionObject : MonoBehaviour
     private Vector3 velocity;
     [SerializeField] ResultsManager resultsManager;
     float actualTime;
+
+    float rValue;
     public void StartSimul()
     {
 
-
-        resultsManager.SpawnPrefabThirdLaw(transform.position.x.ToString("F2"), actualTime.ToString("F2"), transform.position.y.ToString("F2"));
+        rValue = Mathf.Sqrt(Mathf.Pow(transform.position.x,2)+Mathf.Pow(transform.position.y,2));
+        resultsManager.SpawnPrefabThirdLaw(transform.position.x.ToString("F2"), actualTime.ToString("F2"), transform.position.y.ToString("F2"), rValue.ToString());
     
         isSimulating = true;
         InvokeRepeating("GetData", 0.5f, 0.5f);
@@ -42,8 +44,8 @@ public class FrictionObject : MonoBehaviour
     public void GetData()
     {
         actualTime += 0.5f;
-
-        resultsManager.SpawnPrefabThirdLaw(transform.position.x.ToString("F2"), actualTime.ToString("F2"), transform.position.y.ToString("F2"));
+        rValue = Mathf.Sqrt(Mathf.Pow(transform.position.x, 2) + Mathf.Pow(transform.position.y, 2));
+        resultsManager.SpawnPrefabThirdLaw(transform.position.x.ToString("F2"), actualTime.ToString("F2"), transform.position.y.ToString("F2"), rValue.ToString());
 
     }
 

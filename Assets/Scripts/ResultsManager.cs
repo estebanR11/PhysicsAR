@@ -25,10 +25,10 @@ public class ResultsManager : MonoBehaviour
         manager.setText(text);
     }
 
-    public void SpawnPrefabThirdLaw(string x, string t, string y)
+    public void SpawnPrefabThirdLaw(string x, string t, string y, string value)
     {
-        string text = "T: " + t + "s -" + "X: " + x + "m -" + "Y: " + y + " m";
-
+        string text = "T: " + t + "s -" + "X: " + x + "m -" + "Y: " + y + " m -" + "R: " + value;
+         
         TextManager manager = Instantiate(prefab).GetComponent<TextManager>();
         manager.gameObject.transform.SetParent(this.transform);
         manager.setText(text);
