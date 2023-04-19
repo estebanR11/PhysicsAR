@@ -13,7 +13,8 @@ public class ResultsManager : MonoBehaviour
        
         TextManager manager= Instantiate(prefab).GetComponent<TextManager>();
         manager.gameObject.transform.SetParent(this.transform);
-        manager.setText(text);
+        manager.setText(text, new Vector2(0.8f, 0.8f));
+        manager.gameObject.transform.localScale = new Vector2(0.8f, 0.8f);
     }
 
     public void SpawnPrefabFall(string y, string t, string vel)
@@ -22,15 +23,17 @@ public class ResultsManager : MonoBehaviour
 
         TextManager manager = Instantiate(prefab).GetComponent<TextManager>();
         manager.gameObject.transform.SetParent(this.transform);
-        manager.setText(text);
+        manager.setText(text, new Vector2(0.8f, 0.8f));
+        manager.gameObject.transform.localScale = new Vector2(0.8f, 0.8f);
     }
 
     public void SpawnPrefabThirdLaw(string x, string t, string y, string value)
     {
-        string text = "T: " + t + "s -" + "X: " + x + "m -" + "Y: " + y + " m -" + "R: " + value;
+        string text = "T: " + t + "s -" + "X: " + x + "m -" + "Y: " + y + " m -" + "D: " + value;
          
         TextManager manager = Instantiate(prefab).GetComponent<TextManager>();
         manager.gameObject.transform.SetParent(this.transform);
-        manager.setText(text);
+        manager.setText(text, new Vector2(0.8f, 0.8f));
+        manager.gameObject.transform.localScale = new Vector2(0.8f,0.8f);
     }
 }

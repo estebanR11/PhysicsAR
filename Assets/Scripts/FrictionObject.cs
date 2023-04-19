@@ -1,55 +1,174 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 public class FrictionObject : MonoBehaviour
 {
-    public float speed = 5f;
-    public float gravity = 9.81f;
-    public float friction = 0.1f;
-    bool isSimulating =false ;
-    private Vector3 velocity;
     [SerializeField] ResultsManager resultsManager;
-    float actualTime;
+    [SerializeField] TextMeshProUGUI massText;
+    [SerializeField] TextMeshProUGUI frictionText;
+    [SerializeField] TMP_InputField frictionInput;
+    [SerializeField] TMP_InputField massInput;
+    [SerializeField] Button launch;
 
-    float rValue;
+    float x0; 
+    float y0; 
+    float v0x; 
+    float v0y; 
+    public float masa = 1.0f; 
+    float angulo = 30.0f; 
+    float anguloRad;
+    public float coeficienteFriccion = 0.2f; 
+    float time = 0.0f; 
+    float intervalo = 0.5f; 
+    float Fg;
+    
+    float N ;
+    float Ffriccion; 
+    Vector2 posicionAnterior;
+    float distance = 0.0f;
+    float R0;
+
+    bool isSimul = false;
+    private Vector3 position = new Vector3(0.0f, 0.0f, 0.0f);
+
+    bool hasBeenChangedFriction = false;
+    bool hasBeenChangedMass = false;
+
+    private void Start()
+    {
+        launch.interactable = false;
+    }
     public void StartSimul()
     {
+        launch.interactable = false;
+        massInput.interactable = false;
+        frictionInput.interactable = false;
+        
+        Fg = masa * Physics2D.gravity.magnitude;
+        N = masa * Mathf.Cos(angulo * Mathf.Deg2Rad) * Physics2D.gravity.magnitude;
+        x0 = 0.0f;
+        y0 = 0.0f;
+        v0x = 0.0f;
+        v0y = 0.0f;
+        R0 = 0.0f;
+        Ffriccion = coeficienteFriccion * N;
+        posicionAnterior = new Vector2(0.0f,0.0f);
 
-        rValue = Mathf.Sqrt(Mathf.Pow(transform.position.x,2)+Mathf.Pow(transform.position.y,2));
-        resultsManager.SpawnPrefabThirdLaw(transform.position.x.ToString("F2"), actualTime.ToString("F2"), transform.position.y.ToString("F2"), rValue.ToString());
-    
-        isSimulating = true;
-        InvokeRepeating("GetData", 0.5f, 0.5f);
+        resultsManager.SpawnPrefabThirdLaw(0.0f.ToString("F2"), 0.0f.ToString("F2"), 0.0f.ToString("F2"), 0.0f.ToString());
+        isSimul = true;
+        StartCoroutine(CalculatePosition());
+
+        GetComponent<Rigidbody>().useGravity = true;
 
     }
     void Update()
     {
-        if(isSimulating)
+       
+    }
+
+
+    IEnumerator CalculatePosition()
+    {
+        time += intervalo;
+        yield return new WaitForSeconds(intervalo);
+        while (isSimul)
         {
-            float angle = 30f;
-            float radians = -angle * Mathf.Deg2Rad;
-            float opposite = Mathf.Sin(radians) * -gravity;
-            float adjacent = Mathf.Cos(radians) * -gravity;
 
-            velocity += new Vector3(adjacent, opposite, 0) * Time.deltaTime;
+            float ax = 9.8f * (Mathf.Sin(Mathf.PI / 6) - coeficienteFriccion * Mathf.Cos(Mathf.PI / 6)) * Mathf.Cos(Mathf.PI / 6);   // Aceleración en X
 
-            velocity -= velocity * friction * Time.deltaTime;
 
-            transform.position += velocity * Time.deltaTime;
+            float ay = -9.8f * (Mathf.Sin(Mathf.PI / 6) - coeficienteFriccion * Mathf.Cos(Mathf.PI / 6)) * Mathf.Sin(Mathf.PI / 6); // Aceleración en Y
+
+
+            float x = x0 + v0x * time + 0.5f * ax * time * time; // Posición en X
+            float y = y0 + v0y * time + 0.5f * ay * time * time; // Posición en Y
+
+            Vector2 posicionActual = new Vector2(x, y);
+            float dx = posicionActual.x - posicionAnterior.x;
+            float dy = posicionActual.y - posicionAnterior.y;
+            float distanceBetweenPositions = Mathf.Sqrt(dx * dx + dy * dy);
+
+            distance += distanceBetweenPositions;
+
+            resultsManager.SpawnPrefabThirdLaw(x.ToString("F2"), time.ToString("F2"), y.ToString("F2"), distance.ToString());
+            posicionAnterior = posicionActual;
+            yield return new WaitForSeconds(intervalo);
+            time += intervalo;
+        }
+
+
+         
+
+    
+   }
+
+        
+    public void stopSimul()
+    {
+        StopAllCoroutines();
+        isSimul = false;
+
+    }
+
+
+
+    public void changeMass(string massTxt)
+    {
+        hasBeenChangedMass = true;
+
+        float mass = float.Parse(massTxt);
+        if(mass > 1000f)
+        {
+            masa = 1000f;
+            massInput.text = "1000" ;
+        }
+        else if(mass < 0)
+        {
+            masa = 1f;
+            massInput.text= "1";
+        }
+   
+        else
+        {
+            masa = mass;
 
         }
-     
+
+        if (hasBeenChangedFriction && hasBeenChangedMass)
+        {
+            launch.interactable = true;
+        }
     }
 
-    public void GetData()
+    public void changeFriction(string frictionTxt)
     {
-        actualTime += 0.5f;
-        rValue = Mathf.Sqrt(Mathf.Pow(transform.position.x, 2) + Mathf.Pow(transform.position.y, 2));
-        resultsManager.SpawnPrefabThirdLaw(transform.position.x.ToString("F2"), actualTime.ToString("F2"), transform.position.y.ToString("F2"), rValue.ToString());
+        hasBeenChangedFriction = true;
+        float friction = float.Parse(frictionTxt);
+
+        if (friction > 1)
+        {
+            coeficienteFriccion = 1;
+            frictionInput.text = "1";
+        }
+        else if (friction < 0)
+        {
+            coeficienteFriccion = 0.1f;
+            frictionInput.text = "0.1";
+        }
+
+        else
+        {
+            coeficienteFriccion = friction;
+
+        }
+
+        if (hasBeenChangedFriction && hasBeenChangedMass)
+        {
+            launch.interactable = true;
+        }
 
     }
-
-
-
 
 }
