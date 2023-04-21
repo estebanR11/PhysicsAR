@@ -93,6 +93,10 @@ public class FrictionObject : MonoBehaviour
             distance += distanceBetweenPositions;
 
             resultsManager.SpawnPrefabThirdLaw(x.ToString("F2"), time.ToString("F2"), y.ToString("F2"), distance.ToString());
+
+            Vector3 movement = new Vector3(x - transform.position.x, y - transform.position.y, 0f);
+            transform.Translate(new Vector3(ax, 0, ay) * Time.deltaTime);
+
             posicionAnterior = posicionActual;
             yield return new WaitForSeconds(intervalo);
             time += intervalo;

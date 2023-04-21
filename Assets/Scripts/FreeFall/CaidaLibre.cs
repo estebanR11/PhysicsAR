@@ -24,7 +24,7 @@ public class CaidaLibre : MonoBehaviour
     [SerializeField] Slider massSlider;
 
 
-
+    [SerializeField] GameObject explosion;
 
     [Header("Values")]
     [SerializeField] TextMeshProUGUI mass;
@@ -85,9 +85,12 @@ public class CaidaLibre : MonoBehaviour
      CancelInvoke();
         isSimulating = false;
 
+        explosion.SetActive(true);
+
 
     }
 
+    
     public void onMassValueChanged()
     {
         objectInfo.GetComponent<FallBox>().setMass((int)massSlider.value);
