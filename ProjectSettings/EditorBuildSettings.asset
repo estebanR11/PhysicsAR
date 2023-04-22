@@ -17,4 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TerceraLey.unity
     guid: acdebd95e6c02ae41aba5855b752efdc
-  m_configObjects: {}
+  m_configObjects:
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: e954524350532b74986c089145d956fa, type: 2}
+    UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 520e62d6749589b4ea7b4bfcfece0faa, type: 2}
+    com.unity.xr.magicleap.magic_leap_settings: {fileID: 11400000, guid: 72ed87e4747ae81419d55fcee56a87a8, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 3fd4fc0127790db4bae83f7b77da8d45, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 8ead53d254ddb5c4996a25600716f3bf, type: 2}
