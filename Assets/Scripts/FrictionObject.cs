@@ -11,7 +11,7 @@ public class FrictionObject : MonoBehaviour
     [SerializeField] TMP_InputField frictionInput;
     [SerializeField] TMP_InputField massInput;
     [SerializeField] Button launch;
-
+    [SerializeField] GameObject FX;
     float x0; 
     float y0; 
     float v0x; 
@@ -42,6 +42,8 @@ public class FrictionObject : MonoBehaviour
     }
     public void StartSimul()
     {
+        FX.SetActive(true);
+
         launch.interactable = false;
         massInput.interactable = false;
         frictionInput.interactable = false;
@@ -113,7 +115,7 @@ public class FrictionObject : MonoBehaviour
     {
         StopAllCoroutines();
         isSimul = false;
-
+        FX.SetActive(false);
     }
 
 

@@ -18,7 +18,7 @@ public class Launcher : MonoBehaviour
     [Range (1f,200)]
     [SerializeField] float steps = 0.5f;
 
-    [SerializeField]LineRenderer lines;
+  
 
     [SerializeField] List<Vector3> points;
 
@@ -40,9 +40,11 @@ public class Launcher : MonoBehaviour
     [Header("Values")]
     [SerializeField] TextMeshProUGUI ang;
     [SerializeField] TextMeshProUGUI vel;
+
+    [SerializeField] Animator launcher;
     private void Start()
     {
-        lines = GetComponent<LineRenderer>();
+       
         drawLineRenderer();
 
         onAnguloChange();
@@ -69,6 +71,7 @@ public class Launcher : MonoBehaviour
             rb.velocity = CalculateVelocity();
 
             isOnAir = true;
+            launcher.SetTrigger("Launch");
 
             resultsManager.SpawnPrefab(cannon.transform.position.x.ToString("F2"), cannon.transform.position.y.ToString("F2"), actualTime.ToString("F2"));
 
@@ -83,8 +86,11 @@ public class Launcher : MonoBehaviour
       
          
           actualTime += timeBetweenSteps;
+        // v0 * sin(?) * t - (1/2) * g * t^2
+        //x = v0 * cos(?) * t
 
-         resultsManager.SpawnPrefab(cannon.transform.position.x.ToString("F2"), cannon.transform.position.y.ToString("F2"), actualTime.ToString("F2"));
+   
+        resultsManager.SpawnPrefab(cannon.transform.position.x.ToString("F2"), cannon.transform.position.y.ToString("F2"), actualTime.ToString("F2"));
             
 
        
@@ -103,7 +109,6 @@ public class Launcher : MonoBehaviour
         velix = velInicial * Mathf.Cos(angulo* (Mathf.PI / 180));
 
 
-        Debug.Log(velix + " - " + veliy);
         return new Vector2(velix,veliy);
     }
 
@@ -113,7 +118,7 @@ public class Launcher : MonoBehaviour
     public void drawLineRenderer()
     {
         points = null;
-        lines.positionCount = 0;
+ 
         points = new List<Vector3>();
         Vector3 startingPoint, FinishPoint;
         Vector3 startingVelocity = CalculateVelocity();
@@ -140,12 +145,10 @@ public class Launcher : MonoBehaviour
 
         }
 
-        lines.positionCount = 0;
+  
         Vector3[] pointsToTheLines = new Vector3[points.Count];
         pointsToTheLines = points.ToArray();
-        lines.positionCount = points.Count;
 
-        lines.SetPositions(pointsToTheLines);
 
     }
 

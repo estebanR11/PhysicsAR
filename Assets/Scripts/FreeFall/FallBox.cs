@@ -6,12 +6,18 @@ public class FallBox : MonoBehaviour
 {
     [SerializeField] CaidaLibre caida;
 
+    AudioSource asource;
 
+    private void Start()
+    {
+        asource=GetComponent<AudioSource>();
+    }
     private void OnCollisionEnter(Collision collision)
     {
             if(collision.transform.tag == "Finish")
         {
             caida.StopSimul();
+            asource.PlayOneShot(asource.clip);
         }
     }
 
